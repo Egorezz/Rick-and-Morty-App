@@ -7,4 +7,5 @@ class AppColors {
   static Color mainText = const Color.fromARGB(250, 0, 0, 0);
   static Color secondaryText = const Color.fromARGB(179, 30, 29, 29);
   static Color error = const Color.fromARGB(255, 144, 18, 18);
+  static Color unselectedIcon = const Color.fromARGB(255, 108, 108, 108);
 }
