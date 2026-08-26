@@ -14,5 +14,6 @@ class AppRouter extends RootStackRouter {
         AutoRoute(page: FavouritesRoute.page),
       ],
     ),
+    AutoRoute(page: CharacterDetailsRoute.page),
   ];
 }
