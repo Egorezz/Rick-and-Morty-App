@@ -1,28 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:rick_and_morty_app/features/main/view/main_screen.dart';
+import 'package:rick_and_morty_app/core/theme/fonts/fonts.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const RickAndMortyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class RickAndMortyApp extends StatelessWidget {
+  const RickAndMortyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(),
-      home: const MyHomePage(),
+      theme: ThemeData(fontFamily: AppFonts.mainFont),
+      home: const MainScreen(),
+      debugShowCheckedModeBanner: false,
     );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(body: Center(child: Text('Hello, World!')));
   }
 }
