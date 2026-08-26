@@ -10,10 +10,12 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i4;
-import 'package:rick_and_morty_app/features/main/view/favourites_screen.dart'
+import 'package:rick_and_morty_app/features/characters/presentation/screens/favourites_screen.dart'
     as _i1;
-import 'package:rick_and_morty_app/features/main/view/main_screen.dart' as _i2;
-import 'package:rick_and_morty_app/features/main/view/tabs_screen.dart' as _i3;
+import 'package:rick_and_morty_app/features/characters/presentation/screens/home_screen.dart'
+    as _i2;
+import 'package:rick_and_morty_app/features/characters/presentation/screens/tabs_screen.dart'
+    as _i3;
 
 /// generated route for
 /// [_i1.FavouritesScreen]
@@ -32,17 +34,17 @@ class FavouritesRoute extends _i4.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i2.MainScreen]
-class MainRoute extends _i4.PageRouteInfo<void> {
-  const MainRoute({List<_i4.PageRouteInfo>? children})
-    : super(MainRoute.name, initialChildren: children);
+/// [_i2.HomeScreen]
+class HomeRoute extends _i4.PageRouteInfo<void> {
+  const HomeRoute({List<_i4.PageRouteInfo>? children})
+    : super(HomeRoute.name, initialChildren: children);
 
-  static const String name = 'MainRoute';
+  static const String name = 'HomeRoute';
 
   static _i4.PageInfo page = _i4.PageInfo(
     name,
     builder: (data) {
-      return const _i2.MainScreen();
+      return const _i2.HomeScreen();
     },
   );
 }

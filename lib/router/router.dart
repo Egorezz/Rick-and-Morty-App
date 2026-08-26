@@ -10,7 +10,7 @@ class AppRouter extends RootStackRouter {
       page: TabsRoute.page,
       initial: true,
       children: [
-        AutoRoute(page: MainRoute.page),
+        AutoRoute(page: HomeRoute.page),
         AutoRoute(page: FavouritesRoute.page),
       ],
     ),
