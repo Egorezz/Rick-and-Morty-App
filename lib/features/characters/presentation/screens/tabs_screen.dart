@@ -10,7 +10,7 @@ class TabsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AutoTabsRouter(
-      routes: const [MainRoute(), FavouritesRoute()],
+      routes: const [HomeRoute(), FavouritesRoute()],
       builder: (context, child) {
         final tabsRouter = AutoTabsRouter.of(context);
         return Scaffold(
