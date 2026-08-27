@@ -1,30 +1,32 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
+import 'package:rick_and_morty_app/features/characters/domain/entities/character.dart';
+import 'package:rick_and_morty_app/features/characters/domain/repositories/character_repository.dart';
 import 'package:rick_and_morty_app/main.dart';
 
+class FakeCharacterRepository implements CharacterRepository {
+  @override
+  Future<List<Character>> getCharacters(int page) async => [];
+
+  @override
+  Future<Character> getCharacterDetails(int id) async {
+    return const Character(
+      id: 1,
+      name: 'Rick Sanchez',
+      status: 'Alive',
+      image: '',
+      species: 'Human',
+      gender: 'Male',
+      originName: 'Earth',
+      locationName: 'Earth',
+    );
+  }
+}
+
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(RickAndMortyApp());
-
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+  testWidgets('App smoke test', (WidgetTester tester) async {
+    final fakeRepository = FakeCharacterRepository();
+    await tester.pumpWidget(
+      RickAndMortyApp(characterRepository: fakeRepository),
+    );
   });
 }

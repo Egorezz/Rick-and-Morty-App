@@ -9,7 +9,7 @@ class CharacterState {
 
   const CharacterState({
     this.status = CharacterStatus.initial,
-    this.characters = const [],
+    this.characters = const <Character>[],
     this.hasReachedMax = false,
   });
 

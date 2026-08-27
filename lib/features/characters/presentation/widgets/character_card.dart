@@ -1,9 +1,9 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:rick_and_morty_app/core/theme/colors/colors.dart';
 import 'package:rick_and_morty_app/features/characters/domain/entities/character.dart';
 import 'package:rick_and_morty_app/router/router.gr.dart';
-import 'package:auto_route/auto_route.dart';
 
 class CharacterCard extends StatelessWidget {
   final Character character;
@@ -12,9 +12,6 @@ class CharacterCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final imageUrl =
-        'https://rickandmortyapi.com/api/character/avatar/${character.id}.jpeg';
-
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -33,7 +30,7 @@ class CharacterCard extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: CachedNetworkImage(
-                  imageUrl: imageUrl,
+                  imageUrl: character.image,
                   width: 100,
                   height: 100,
                   fit: BoxFit.cover,

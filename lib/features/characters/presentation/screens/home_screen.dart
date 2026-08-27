@@ -2,10 +2,9 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 import 'package:rick_and_morty_app/core/theme/colors/colors.dart';
 import 'package:rick_and_morty_app/core/theme/icons/icons.dart';
-import 'package:rick_and_morty_app/features/characters/presentation/bloc/character_bloc.dart';
+import 'package:rick_and_morty_app/features/characters/presentation/bloc/character_bloc/character_bloc.dart';
 import 'package:rick_and_morty_app/features/characters/presentation/widgets/character_card.dart';
 
 @RoutePage()
@@ -89,20 +88,38 @@ class _HomeScreenState extends State<HomeScreen> {
               child: CircularProgressIndicator(color: AppColors.main),
             );
           }
-
           if (state.status == CharacterStatus.error &&
               state.characters.isEmpty) {
-            return const Center(
-              child: Text(
-                'Не удалось загрузить данные',
-                style: TextStyle(
-                  fontWeight: FontWeight.normal,
-                  color: AppColors.background,
-                ),
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'Не удалось загрузить данные',
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: AppColors.mainText,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      context.read<CharacterBloc>().add(FetchCharactersEvent());
+                    },
+                    child: const Text('Повторить'),
+                  ),
+                ],
               ),
             );
           }
-
+          if (state.characters.isEmpty) {
+            return const Center(
+              child: Text(
+                'Персонажи не найдены',
+                style: TextStyle(color: AppColors.mainText),
+              ),
+            );
+          }
           return ListView.builder(
             controller: _scrollController,
             itemCount: state.hasReachedMax

@@ -1,5 +1,5 @@
 part of 'character_bloc.dart';
 
-abstract class CharacterEvent {}
+sealed class CharacterEvent {}
 
 class FetchCharactersEvent extends CharacterEvent {}
