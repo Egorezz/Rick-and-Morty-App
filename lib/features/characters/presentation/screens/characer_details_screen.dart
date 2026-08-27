@@ -6,31 +6,25 @@ import 'package:rick_and_morty_app/core/theme/colors/colors.dart';
 import 'package:rick_and_morty_app/features/characters/domain/entities/character.dart';
 import 'package:rick_and_morty_app/features/characters/domain/repositories/character_repository.dart';
 import 'package:rick_and_morty_app/features/characters/presentation/bloc/character_details_bloc/character_details_bloc.dart';
+import 'package:rick_and_morty_app/features/characters/presentation/bloc/favorites_bloc/favorites_bloc.dart';
 
 @RoutePage()
-class CharacterDetailsScreen extends StatefulWidget {
+class CharacterDetailsScreen extends StatelessWidget {
   final Character character;
 
   const CharacterDetailsScreen({super.key, required this.character});
-
-  @override
-  State<CharacterDetailsScreen> createState() => _CharacterDetailsScreenState();
-}
-
-class _CharacterDetailsScreenState extends State<CharacterDetailsScreen> {
-  bool _isFavorite = false;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) =>
           CharacterDetailsBloc(repository: context.read<CharacterRepository>())
-            ..add(GetCharacterDetailsEvent(widget.character.id)),
+            ..add(GetCharacterDetailsEvent(character.id)),
       child: BlocBuilder<CharacterDetailsBloc, CharacterDetailsState>(
         builder: (context, state) {
-          final character = (state is CharacterDetailsLoaded)
+          final currentCharacter = (state is CharacterDetailsLoaded)
               ? state.character
-              : widget.character;
+              : character;
 
           return Scaffold(
             backgroundColor: AppColors.background,
@@ -46,8 +40,8 @@ class _CharacterDetailsScreenState extends State<CharacterDetailsScreen> {
               ),
               backgroundColor: AppColors.main,
               title: Text(
-                character.name,
-                style: TextStyle(
+                currentCharacter.name,
+                style: const TextStyle(
                   color: AppColors.background,
                   fontWeight: FontWeight.bold,
                 ),
@@ -56,24 +50,32 @@ class _CharacterDetailsScreenState extends State<CharacterDetailsScreen> {
               actions: [
                 Padding(
                   padding: const EdgeInsets.only(right: 10),
-                  child: IconButton(
-                    icon: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 300),
-                      transitionBuilder: (child, animation) =>
-                          ScaleTransition(scale: animation, child: child),
-                      child: Icon(
-                        _isFavorite ? Icons.favorite : Icons.favorite_border,
-                        key: ValueKey<bool>(_isFavorite),
-                        color: _isFavorite
-                            ? AppColors.favourite
-                            : AppColors.background,
-                        size: 37,
-                      ),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _isFavorite = !_isFavorite;
-                      });
+                  child: BlocBuilder<FavoritesBloc, FavoritesState>(
+                    builder: (context, favState) {
+                      final isFavorite =
+                          (favState is FavoritesLoadedState) &&
+                          favState.favoriteIds.contains(currentCharacter.id);
+
+                      return IconButton(
+                        icon: AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 300),
+                          transitionBuilder: (child, animation) =>
+                              ScaleTransition(scale: animation, child: child),
+                          child: Icon(
+                            isFavorite ? Icons.favorite : Icons.favorite_border,
+                            key: ValueKey<bool>(isFavorite),
+                            color: isFavorite
+                                ? AppColors.favourite
+                                : AppColors.background,
+                            size: 37,
+                          ),
+                        ),
+                        onPressed: () {
+                          context.read<FavoritesBloc>().add(
+                            ToggleFavoriteEvent(currentCharacter),
+                          );
+                        },
+                      );
                     },
                   ),
                 ),
@@ -87,7 +89,7 @@ class _CharacterDetailsScreenState extends State<CharacterDetailsScreen> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(16),
                       child: CachedNetworkImage(
-                        imageUrl: character.image,
+                        imageUrl: currentCharacter.image,
                         width: 400,
                         height: 400,
                         fit: BoxFit.cover,
@@ -117,7 +119,7 @@ class _CharacterDetailsScreenState extends State<CharacterDetailsScreen> {
                       ),
                     )
                   else
-                    _buildInfoContainer(character),
+                    _buildInfoContainer(currentCharacter),
                 ],
               ),
             ),
@@ -138,7 +140,7 @@ class _CharacterDetailsScreenState extends State<CharacterDetailsScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Center(
+          const Center(
             child: Text(
               'Information',
               style: TextStyle(
@@ -152,12 +154,15 @@ class _CharacterDetailsScreenState extends State<CharacterDetailsScreen> {
           const SizedBox(height: 8),
           Text(
             'Character ID: #${character.id}',
-            style: TextStyle(color: AppColors.secondaryText, fontSize: 16),
+            style: const TextStyle(
+              color: AppColors.secondaryText,
+              fontSize: 16,
+            ),
           ),
           const SizedBox(height: 8),
           Text(
             'Name: ${character.name}',
-            style: TextStyle(
+            style: const TextStyle(
               color: AppColors.mainText,
               fontSize: 16,
               fontWeight: FontWeight.w600,
@@ -168,7 +173,10 @@ class _CharacterDetailsScreenState extends State<CharacterDetailsScreen> {
             children: [
               Text(
                 'Status: ${character.status}',
-                style: TextStyle(color: AppColors.secondaryText, fontSize: 16),
+                style: const TextStyle(
+                  color: AppColors.secondaryText,
+                  fontSize: 16,
+                ),
               ),
               const SizedBox(width: 8),
               Container(
@@ -187,28 +195,40 @@ class _CharacterDetailsScreenState extends State<CharacterDetailsScreen> {
             const SizedBox(height: 8),
             Text(
               'Species: ${character.species}',
-              style: TextStyle(color: AppColors.secondaryText, fontSize: 16),
+              style: const TextStyle(
+                color: AppColors.secondaryText,
+                fontSize: 16,
+              ),
             ),
           ],
           if (character.gender.isNotEmpty) ...[
             const SizedBox(height: 8),
             Text(
               'Gender: ${character.gender}',
-              style: TextStyle(color: AppColors.secondaryText, fontSize: 16),
+              style: const TextStyle(
+                color: AppColors.secondaryText,
+                fontSize: 16,
+              ),
             ),
           ],
           if (character.originName.isNotEmpty) ...[
             const SizedBox(height: 8),
             Text(
               'Origin: ${character.originName}',
-              style: TextStyle(color: AppColors.secondaryText, fontSize: 16),
+              style: const TextStyle(
+                color: AppColors.secondaryText,
+                fontSize: 16,
+              ),
             ),
           ],
           if (character.locationName.isNotEmpty) ...[
             const SizedBox(height: 8),
             Text(
               'Last location: ${character.locationName}',
-              style: TextStyle(color: AppColors.secondaryText, fontSize: 16),
+              style: const TextStyle(
+                color: AppColors.secondaryText,
+                fontSize: 16,
+              ),
             ),
           ],
         ],
